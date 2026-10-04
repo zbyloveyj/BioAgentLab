@@ -1,0 +1,56 @@
+name: Build Chinese textbook
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'book/zh/**'
+      - 'book/frontmatter.html'
+      - 'scripts/build_book.py'
+      - 'book/BUILD_READY'
+permissions:
+  contents: write
+concurrency:
+  group: bioagentlab-book
+  cancel-in-progress: true
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[build-book]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install typography dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk fonts-dejavu-core libpango-1.0-0 libpangoft2-1.0-0
+          python -m pip install 'weasyprint==66.0' 'markdown-it-py==4.0.0' 'PyMuPDF==1.26.4'
+      - name: Build book
+        run: python scripts/build_book.py
+      - name: Require at least 200 pages
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          info = json.loads(Path('docs/pdf/AI_Agent_for_Biology_ZH.build.json').read_text())
+          assert info['pages'] >= 200, info
+          print(info)
+          PY
+      - name: Save PDF in repository
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add docs/pdf/AI_Agent_for_Biology_ZH.pdf docs/pdf/AI_Agent_for_Biology_ZH.build.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish built Chinese textbook PDF [skip ci]'
+            git push
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: AI-Agent-for-Biology-ZH
+          path: |
+            docs/pdf/AI_Agent_for_Biology_ZH.pdf
+            docs/pdf/AI_Agent_for_Biology_ZH.build.json
+          retention-days: 90
