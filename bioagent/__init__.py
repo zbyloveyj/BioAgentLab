@@ -1,3 +1,2 @@
-"""BioAgentLab: evidence-grounded AI agents for biological research."""
-
-__version__ = "0.1.0"
+"""BioAgentLab: a transparent teaching toolkit for biology research agents."""
+__version__ = "0.2.0"

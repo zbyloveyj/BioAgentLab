@@ -1,2 +1,3 @@
-pytest>=8.0
-ruff>=0.6
+# Core runtime uses Python's standard library only.
+# Install development tools with: python -m pip install -e '.[dev]'
+pytest>=8,<10

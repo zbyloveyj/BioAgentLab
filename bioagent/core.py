@@ -1,46 +1,48 @@
-"""Core schemas and provider-agnostic model interface."""
+"""Small compatibility interfaces used by the introductory prompt workflow.
 
+For provenance-aware work use bioagent.evidence.Evidence and EvidenceLedger.
+"""
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any, Protocol
+import math
 
 
 class LLMClient(Protocol):
-    """Minimal interface required by reasoning agents."""
-
     def complete(self, prompt: str) -> str:
-        """Return a text completion."""
         ...
 
 
 class CallableLLMClient:
-    """Adapt any string-to-string callable into an LLM client."""
-
     def __init__(self, fn: Callable[[str], str]) -> None:
         self._fn = fn
 
     def complete(self, prompt: str) -> str:
-        return self._fn(prompt)
+        value = self._fn(prompt)
+        if not isinstance(value, str):
+            raise TypeError("Model must return text")
+        return value
 
 
 @dataclass
 class EvidenceItem:
-    """A traceable piece of evidence supporting or challenging a claim."""
-
     title: str
     source: str
     confidence: float = 0.5
     direction: str = "unknown"
     notes: str = ""
 
-    def __post_init__(self) -> None:
-        self.confidence = max(0.0, min(1.0, float(self.confidence)))
+    def __post_init__(self):
+        if not self.title.strip() or not self.source.strip():
+            raise ValueError("Evidence title and source are required")
+        if isinstance(self.confidence, bool) or not math.isfinite(self.confidence) or not 0 <= self.confidence <= 1:
+            raise ValueError("confidence must be finite and in [0,1]")
+        if self.direction not in {"supports", "contradicts", "unknown"}:
+            raise ValueError("Invalid direction")
 
 
 @dataclass
 class Hypothesis:
-    """A scientific hypothesis with evidence, critiques and scores."""
-
     identifier: str
     statement: str
     rationale: str = ""
