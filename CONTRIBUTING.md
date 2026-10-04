@@ -1,27 +1,8 @@
-# Contributing to BioAgentLab
+# Contributing
 
-BioAgentLab is currently in an early research and teaching phase.
+1. 新功能应附最小测试和可复现实例。
+2. 真实数据结论必须记录数据版本、分析参数和证据来源。
+3. 模拟数据、教学示例和真实验证结果必须显式区分。
+4. 不提交患者标识信息、访问令牌或受限数据。
+5. 提交前运行 `python -m unittest discover -s tests`。
 
-## Design principles
-1. Evidence before eloquence.
-2. Reliable scientific software should perform numerical computation.
-3. Every agent decision should be inspectable.
-4. Biological claims should carry provenance whenever possible.
-5. Reproducibility is a first-class feature.
-6. Multi-agent systems should reduce error, not merely multiply prompts.
-
-## Development workflow
-- Keep changes small and testable.
-- Add or update tests when behavior changes.
-- Prefer provider-agnostic interfaces.
-- Never hard-code secrets or API keys.
-- Put domain workflows under workflows/.
-- Put reusable primitives under bioagent/.
-- Put learning material under book/.
-
-## Coding style
-- Python 3.10+
-- Type hints for public APIs
-- Clear docstrings
-- Minimal hidden state
-- Deterministic behavior where possible

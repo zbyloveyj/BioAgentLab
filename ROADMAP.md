@@ -1,11 +1,30 @@
 # Roadmap
 
-## Delivered teaching scope (0.2)
+## v0.1 - Foundations
 
-Complete Chinese learning manuscript; 200-page minimum PDF build gate; offline notebooks; tested evidence bookkeeping, tool contracts, retrieval, versioned hypotheses, constrained debate interface, Elo and small biology primitives; synthetic end-to-end MicroMetaCell workflow.
+- [x] Agent 数据模型与离线假设竞赛
+- [x] 证据声明和评审接口
+- [x] 130 页以上中文教材与 PDF 构建链
 
-## Research extensions, not implemented claims
+## v0.2 - Evidence and RAG
 
-Real full-text semantic verification; curated entity/knowledge-graph services; validated MCP adapters; production metagenomics and single-cell pipelines; persistent multi-user scheduling and recovery; independent real-world benchmarks and expert review.
+- [ ] PubMed / Crossref 检索适配器
+- [ ] 文献去重、证据分级与引用追踪
+- [ ] 可复现的 RAG 评估集
 
-Each extension requires a defined task, approved data, testable contracts, a baseline and explicit failure cases. A new role name or an extra model call is not itself evidence of scientific improvement.
+## v0.3 - Scientific Discovery
+
+- [ ] Scientific Debate 与 Elo/Bradley-Terry 排序
+- [ ] 失败恢复、预算控制和审计日志
+- [ ] Human-in-the-loop 审批节点
+
+## v0.4 - Biology Agents
+
+- [ ] Microbiome、single-cell 与 multi-omics 工作流
+- [ ] HGT opportunity-adjusted propensity 案例实现
+- [ ] 数据泄漏、批次效应与负对照测试
+
+## v1.0
+
+- [ ] 完整教材、稳定 API、benchmark 与公开发布准备
+

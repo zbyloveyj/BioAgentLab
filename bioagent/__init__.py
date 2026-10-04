@@ -1,2 +1,7 @@
-"""BioAgentLab: a transparent teaching toolkit for biology research agents."""
-__version__ = "0.2.0"
+"""BioAgentLab public API."""
+
+from .core.models import EvidenceClaim, Hypothesis
+from .supervisor.tournament import ScientificSupervisor
+
+__all__ = ["EvidenceClaim", "Hypothesis", "ScientificSupervisor"]
+

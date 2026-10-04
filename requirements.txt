@@ -1,3 +1,4 @@
-# Core runtime uses Python's standard library only.
-# Install development tools with: python -m pip install -e '.[dev]'
-pytest>=8,<10
+reportlab>=4.2
+pypdf>=5.0
+pdfplumber>=0.11
+
