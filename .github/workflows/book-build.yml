@@ -27,8 +27,31 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends pandoc texlive-xetex texlive-lang-chinese texlive-latex-extra fonts-noto-cjk fonts-dejavu-core fonts-liberation
           python -m pip install -e '.[dev,book,notebooks]'
-      - name: Apply reviewed first-edition layout edits
-        run: python scripts/apply_release_edits.py
+      - name: Apply reviewed layout replacements
+        shell: bash
+        run: |
+          git rev-parse HEAD
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          entries = json.loads(Path('book/release_edits.json').read_text(encoding='utf-8'))
+          for entry in entries:
+              path = Path(entry['path'])
+              if path.is_absolute() or '..' in path.parts or path.parts[0] not in {'book', 'scripts'}:
+                  raise ValueError('Unsafe editorial path')
+              text = path.read_text(encoding='utf-8')
+              count = 0
+              for edit in entry['changes']:
+                  old, new = edit['old'], edit['new']
+                  if new in text:
+                      continue
+                  if text.count(old) != 1:
+                      raise ValueError(f'Editorial anchor does not match: {path}')
+                  text = text.replace(old, new, 1)
+                  count += 1
+              path.write_text(text, encoding='utf-8')
+              print(str(path), count, 'reviewed edits')
+          PY
       - name: Generate and execute notebooks
         run: python scripts/build_notebooks.py --execute
       - name: Build the complete PDF
