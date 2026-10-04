@@ -4,53 +4,60 @@ on:
   push:
     branches: [main]
     paths:
-      - 'book/zh/**'
-      - 'book/frontmatter.html'
-      - 'scripts/build_book.py'
-      - 'book/BUILD_READY'
+      - 'book/**'
+      - 'scripts/**'
+      - '.github/workflows/book-build.yml'
 permissions:
   contents: write
 concurrency:
   group: bioagentlab-book
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   build:
     if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[build-book]')
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Install typography dependencies
+      - name: Install typesetting dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk fonts-dejavu-core libpango-1.0-0 libpangoft2-1.0-0
-          python -m pip install 'weasyprint==66.0' 'markdown-it-py==4.0.0' 'PyMuPDF==1.26.4'
-      - name: Build book
-        run: python scripts/build_book.py
-      - name: Require at least 200 pages
-        run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          info = json.loads(Path('docs/pdf/AI_Agent_for_Biology_ZH.build.json').read_text())
-          assert info['pages'] >= 200, info
-          print(info)
-          PY
-      - name: Save PDF in repository
+          sudo apt-get install -y --no-install-recommends pandoc texlive-xetex texlive-lang-chinese texlive-latex-extra fonts-noto-cjk fonts-dejavu-core fonts-liberation
+          python -m pip install -e '.[dev,book,notebooks]'
+      - name: Generate and execute notebooks
+        run: python scripts/build_notebooks.py --execute
+      - name: Build the complete PDF
+        run: python scripts/build_book.py --min-pages 200
+      - name: Verify code and release artifacts
+        run: python scripts/verify_release.py
+      - name: Publish book and verification records
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/pdf/AI_Agent_for_Biology_ZH.pdf docs/pdf/AI_Agent_for_Biology_ZH.build.json
+          git add docs/pdf docs/verification.json book/README.md notebooks
           if ! git diff --cached --quiet; then
-            git commit -m 'Publish built Chinese textbook PDF [skip ci]'
+            git commit -m 'Publish Chinese textbook, notebooks and verification [skip ci]'
             git push
           fi
+      - name: Package complete learning project
+        run: python scripts/package_release.py
       - uses: actions/upload-artifact@v4
         with:
-          name: AI-Agent-for-Biology-ZH
+          name: BioAgentLab-Learning-Edition
           path: |
-            docs/pdf/AI_Agent_for_Biology_ZH.pdf
-            docs/pdf/AI_Agent_for_Biology_ZH.build.json
+            dist/AI_Agent_for_Biology_ZH.pdf
+            dist/BioAgentLab_2026_10.zip
+            dist/verification.json
+          if-no-files-found: error
           retention-days: 90
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: book-build-diagnostics
+          path: |
+            build/book/*.log
+            build/test-results.xml
+          retention-days: 7

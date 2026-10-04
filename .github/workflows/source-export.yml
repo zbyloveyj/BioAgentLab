@@ -19,13 +19,25 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: BioAgentLab-source
+          include-hidden-files: true
           path: |
             book/
             bioagent/
             examples/
             tests/
             scripts/
+            docs/
+            notebooks/
+            workflows/
+            benchmark/
+            .github/
+            .gitignore
+            .env.example
             pyproject.toml
+            requirements.txt
             README.md
+            ROADMAP.md
+            CHANGELOG.md
+            CONTRIBUTING.md
           if-no-files-found: error
           retention-days: 7

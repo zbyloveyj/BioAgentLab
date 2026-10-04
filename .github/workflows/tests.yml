@@ -1,0 +1,22 @@
+name: Python tests
+on:
+  push:
+    paths: ['bioagent/**', 'tests/**', 'pyproject.toml', '.github/workflows/tests.yml']
+  pull_request:
+    paths: ['bioagent/**', 'tests/**', 'pyproject.toml']
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.10', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest -q
+      - run: python -m bioagent demo --out runs/ci
