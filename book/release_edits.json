@@ -1,0 +1,60 @@
+[
+  {
+    "path": "book/zh/13_hypothesis_generation.md",
+    "before": "601c1d38a8716ec62f84feb788784348afa6abbdf8081d7c0e65fb88bd278f63",
+    "after": "f19e54dad9449d8b68f4fdef5fda275a897450f9cdb0199c2f75c8782b0b1c2e",
+    "changes": [{"old": "\n**本章要点：**生成模块负责探索可检验解释；新颖性、支持程度与实验可行性需要分别核验。\n", "new": "\n**本章要点：**生成可检验解释；分别核验新颖性、证据与可行性。\n"}]
+  },
+  {
+    "path": "book/zh/15_debate_and_elo.md",
+    "before": "7f3cfb4c9473377cd9a903b1efc8caab915826032e3597d7936557c2dda573e7",
+    "after": "a1751167e381e87e6d4ef691531b1f4a9c7cc1f3f205e97c336db4e05c7bb03b",
+    "changes": [{"old": "\n**练习二：**更换展示顺序后，评审总偏好第一个候选，怎么办？参考思路：记录位置偏差，采用互换复评或盲化展示，检查提示词和评审标准；不能直接把所有结果平均后宣称偏差消失。\n\n**本章要点：**辩论应交换证据与预测；Elo 是相对偏好工具，不是科学真值概率。\n", "new": "\n**练习二：**更换展示顺序后，评审总偏好第一个候选，怎么办？参考思路：记录位置偏差，采用互换复评或盲化展示，检查提示词和评审标准；不能直接平均后宣称偏差消失。**要点：**Elo只是相对偏好，不是科学真值概率。\n"}]
+  },
+  {
+    "path": "book/zh/21_genomics_and_metagenomics.md",
+    "before": "d9f7ff4fc42b0d0af578cb1236cf50e24954e9b3cfbe91dbd39f248fefc5a686",
+    "after": "5580560a8c9139cc7e9e36e18e048f241cb1ac24311818053969989efacd2a3d",
+    "changes": [{"old": "\n**练习二：**两个软件都输出物种丰度，能否直接合并？参考思路：先核对分类体系、数据库、单位和归一化；必要时统一处理或进行方法敏感性分析。\n\n**本章要点：**序列分析交给专业工作流，Agent管理契约、检查与解释；测量层级决定结论边界。\n", "new": "\n**练习二：**两个工具的物种丰度能否直接合并？先核对分类体系、数据库、单位与归一化，必要时统一处理并做敏感性分析。**要点：**专业软件计算，Agent审计；结论不能超出测量层级。\n"}]
+  },
+  {
+    "path": "book/zh/29_models_and_deployment.md",
+    "before": "b11efc2321a67dcaa04c5b8bd1b0a44d6d6e98d60d369395281cefa29c48367a",
+    "after": "5d943ca3386944d013a3180bbfc760ec26906e6992784d6a069c24c7f472f5df",
+    "changes": [{"old": "\n**本章要点：**供应商适配、预算与可观测性独立于科研逻辑；默认离线与明确授权减少误操作。\n", "new": "\n**本章要点：**模型适配与科研逻辑分离；权限和预算由程序控制。\n"}]
+  },
+  {
+    "path": "book/zh/42_lab03_local_retrieval.md",
+    "before": "d36c48543bb55f63ee3325d888f7c8c6342fc8fb189e658d7104e3b51de00e23",
+    "after": "02eae9b0a8435337d695893006523449fc7583704c895c1621fd67acfef01bee",
+    "changes": [{"old": "\n提交语料、查询标注、指标和一个检索失败案例。解释失败来自词语、切分、语料覆盖还是结果排序，并提出一个可以测试的改进。\n\n参考答案不应说“检索分数高，所以结论可靠”。应指出检索只选择待阅读材料，证据方向、研究设计和适用范围在下一层核验。\n", "new": "\n提交语料、查询标注、指标和一个失败案例。区分词项、切分、覆盖与排序问题，并提出可测试的改进。**参考要点：**检索选择材料，不能代替证据方向、设计与适用范围的核验。\n"}]
+  },
+  {
+    "path": "book/zh/44_lab05_pairwise_ranking.md",
+    "before": "2901174b8507a4b343bdb0320861b1daea31246d40c5a0031ae13d7c501866d5",
+    "after": "8267daf948c7c6ccd86df50cf193345394675c5e61f5dfdcf75538f93c68ff30",
+    "changes": [{"old": "\n提交三种赛程的分值、循环偏好的解释、一个无法比较案例，以及资格门槛设计。参考答案应指出排名是相对偏好，不是机制真实性概率；赛程、评审和材料都会影响结果。\n\n扩展任务是改变K并比较稳定性。不要把更大的分值差解释成更多科学证据，因为它可能仅由K变化造成。\n", "new": "\n提交三种赛程的分值、循环偏好解释、无法比较案例与资格门槛。排名反映相对偏好，不是真值概率；改变K会改变分差，却不会增加科学证据。还应指出评审材料与展示顺序造成的不确定性。\n"}]
+  },
+  {
+    "path": "book/zh/46_lab07_compositional_analysis.md",
+    "before": "3793fefb97b61a07bff7e56ead5f4eccaa43406fe275fc0af5443ed2e5bd2b1a",
+    "after": "7dfa3a2b41e1e53f5175c40aa534f16ed3ca847c754e4d61e04032f8a5af9367",
+    "changes": [{"old": "\n扩展任务是设计一个测试，确认输入包含NaN、无穷值或布尔值时被拒绝。真实数据中这些异常可能来自导出或类型转换，必须在模型解释之前处理。\n", "new": "\n扩展任务：测试NaN、无穷值和布尔值是否被拒绝。这些异常可能来自导出或类型转换，必须先于模型解释处理。\n"}]
+  },
+  {
+    "path": "book/zh/70_references.md",
+    "before": "3191d3f9d08681ce314743262c7779b9b095504eeb335ab0fd9dd962ccc75ff2",
+    "after": "61450dd7b44a75723550c9c1f3b472777ca49c5c8a39d9c8ddd5b2abaa46f1f7",
+    "changes": [{"old": "\n不要把参考资料数量当作证据强度。每个具体研究结论仍需要与其直接对应的原始证据，不能用本表中的方法论文为一个未验证的生物机制背书。\n", "new": "\n参考资料多不等于证据强。生物学结论需要直接对应的原始研究，不能用方法论文为未验证机制背书。\n"}]
+  },
+  {
+    "path": "scripts/build_book.py",
+    "before": "b5db8b192c8222d2a0f544022b36cca098f882a3af41329a1241eddca811be18",
+    "after": "4b7208ccb05c35316b3a167963f24feb9e7ba3085a14392e004df5ffd873a6cc",
+    "changes": [
+      {"old": "\\usepackage{amsmath,amssymb,booktabs,longtable,array,calc}\n\\usepackage{graphicx,xcolor,fvextra,fancyhdr,setspace,enumitem,xurl,hyperref,bookmark}\n", "new": "\\usepackage{amsmath,amssymb,booktabs,longtable,array,calc}\n\\usepackage{graphicx,xcolor,fvextra,fancyhdr,setspace,enumitem,xurl,seqsplit,hyperref,bookmark}\n"},
+      {"old": "\\emergencystretch=2em\n", "new": "\\emergencystretch=2em\n\\widowpenalty=10000\\clubpenalty=10000\\displaywidowpenalty=10000\n\\raggedbottom\n"},
+      {"old": "        value = value.replace('/', r'/\\allowbreak{}').replace('-', r'-\\allowbreak{}')\n        return r'\\texttt{' + value + '}'\n    return re.sub(r'\\\\texttt\\{([^{}]*)\\}', wrap_inline, out)\n", "new": "        value = value.replace('/', r'/\\allowbreak{}').replace('-', r'-\\allowbreak{}')\n        return r'\\texttt{\\seqsplit{' + value + '}}'\n    out = re.sub(r'\\\\texttt\\{([^{}]*)\\}', wrap_inline, out)\n    out = re.sub(r'DOI:(10\\.[0-9]+/[0-9A-Za-z./_()\\-]+)', lambda m: 'DOI:'+r'\\nolinkurl{'+m.group(1).rstrip('.')+'}'+('.' if m.group(1).endswith('.') else ''), out)\n    return out\n"}
+    ]
+  }
+]

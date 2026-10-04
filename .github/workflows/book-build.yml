@@ -27,6 +27,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends pandoc texlive-xetex texlive-lang-chinese texlive-latex-extra fonts-noto-cjk fonts-dejavu-core fonts-liberation
           python -m pip install -e '.[dev,book,notebooks]'
+      - name: Apply reviewed first-edition layout edits
+        run: python scripts/apply_release_edits.py
       - name: Generate and execute notebooks
         run: python scripts/build_notebooks.py --execute
       - name: Build the complete PDF
@@ -37,7 +39,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add docs/pdf docs/verification.json book/README.md notebooks
+          git add docs/pdf docs/verification.json book/README.md book/zh scripts/build_book.py notebooks
           if ! git diff --cached --quiet; then
             git commit -m 'Publish Chinese textbook, notebooks and verification [skip ci]'
             git push
