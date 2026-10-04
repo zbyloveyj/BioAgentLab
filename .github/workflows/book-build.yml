@@ -40,6 +40,11 @@ jobs:
               if path.is_absolute() or '..' in path.parts or path.parts[0] not in {'book', 'scripts'}:
                   raise ValueError('Unsafe editorial path')
               text = path.read_text(encoding='utf-8')
+              is_builder = path.as_posix() == 'scripts/build_book.py'
+              # Normalize the known package-order correction before checking
+              # original editorial anchors, making repeated builds idempotent.
+              if is_builder:
+                  text = text.replace('xurl,hyperref,seqsplit,bookmark', 'xurl,seqsplit,hyperref,bookmark')
               count = 0
               for edit in entry['changes']:
                   old, new = edit['old'], edit['new']
@@ -49,6 +54,10 @@ jobs:
                       raise ValueError(f'Editorial anchor does not match: {path}')
                   text = text.replace(old, new, 1)
                   count += 1
+              if is_builder:
+                  # seqsplit must see hyperref's PDF-string commands in this
+                  # TeX distribution. The correction is published in the source.
+                  text = text.replace('xurl,seqsplit,hyperref,bookmark', 'xurl,hyperref,seqsplit,bookmark')
               path.write_text(text, encoding='utf-8')
               print(str(path), count, 'reviewed edits')
           PY
