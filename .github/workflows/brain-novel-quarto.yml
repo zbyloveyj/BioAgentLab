@@ -1,0 +1,30 @@
+name: Rebuild brain-novel Quarto preview
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'book/brain-novel/**'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: quarto-dev/quarto-actions/setup@v2
+      - name: Render three preview chapters with Quarto
+        working-directory: book/brain-novel
+        run: quarto render
+      - name: Update the isolated GitHub Pages subdirectory
+        run: |
+          mkdir -p docs/brain-novel
+          rsync -a --delete book/brain-novel/_book/ docs/brain-novel/
+          touch docs/.nojekyll
+          git add docs/brain-novel docs/.nojekyll
+          if ! git diff --cached --quiet; then
+            git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' commit -m 'Build Quarto preview of brain novel'
+            git push origin HEAD:main
+          fi
