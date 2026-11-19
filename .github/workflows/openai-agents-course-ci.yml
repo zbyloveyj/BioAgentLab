@@ -1,0 +1,58 @@
+name: OpenAI Agents SDK Chinese course checks
+
+on:
+  push:
+    paths:
+      - 'courses/openai-agents-sdk-zh/**'
+      - '.github/workflows/openai-agents-course-ci.yml'
+  pull_request:
+    paths:
+      - 'courses/openai-agents-sdk-zh/**'
+      - '.github/workflows/openai-agents-course-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  offline-course-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: courses/openai-agents-sdk-zh
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: courses/openai-agents-sdk-zh/pyproject.toml
+      - name: Install course dependencies
+        run: python -m pip install -e ".[notebook,dev]"
+      - name: Check syntax and notebook structure
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          import nbformat
+          root = Path('.')
+          for path in sorted(root.rglob('*.py')):
+              if '.venv' not in path.parts:
+                  ast.parse(path.read_text(encoding='utf-8'), filename=str(path))
+          books = sorted((root / 'notebooks').glob('*.ipynb'))
+          assert len(books) >= 13, f'Expected 13 notebooks, found {len(books)}'
+          for path in books:
+              notebook = nbformat.read(path, as_version=4)
+              nbformat.validate(notebook)
+              for idx, cell in enumerate(notebook.cells):
+                  if cell.cell_type == 'code':
+                      ast.parse(cell.source, filename=f'{path} cell {idx}')
+          print('Python syntax and notebooks OK:', len(books))
+          PY
+      - name: Offline course tests
+        run: pytest -q
+      - name: Offline standalone examples
+        run: |
+          python lessons/00_environment_check.py
+          python lessons/12_offline_research.py
