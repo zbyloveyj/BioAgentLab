@@ -1,17 +1,16 @@
-"""Agent 可调用的函数工具。
+"""用官方 @function_tool 把 Python 函数暴露给模型。
 
-导入此模块需要先安装 openai-agents。不要向工具暴露任意本地文件读写。
+注意：openai-agents 的官方装饰器是 function_tool，不是 @tool。
 """
 from __future__ import annotations
+
 import json
-
-from agents.decorators import tool
-
+from agents import function_tool
 from .data import MICROBES
 from .rag import retrieve
 
 
-@tool
+@function_tool
 def lookup_microbe(name: str) -> str:
     """查询教学模拟数据库中的微生物基础介绍。
 
@@ -24,7 +23,7 @@ def lookup_microbe(name: str) -> str:
     return json.dumps({"found": True, "name": name, **item, "source": "教学模拟数据"}, ensure_ascii=False)
 
 
-@tool
+@function_tool
 def search_local_notes(question: str, top_k: int = 3) -> str:
     """查阅本地教学知识卡片，返回匹配的原文与来源，不编造论文 PMID。
 

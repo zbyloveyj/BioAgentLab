@@ -1,10 +1,10 @@
 # OpenAI Agents SDK 中文实战学院｜从零到生物科研 Agent
 
-> **面向 Python / Jupyter 初学者的可运行课程**。先理解大模型、SDK、工具调用与智能体循环，再亲手构建 PubMed 文献检索与证据整理工作流。所有示例按教学顺序组织，中文解释配套 Python 脚本与 Notebook。
+> 从 Python 零基础逐步学习智能体：配置、首次调用、工具、结构化输出、记忆、PubMed、RAG、多智能体、流式输出、护栏、科研导出。每节都有中文说明、可运行 Python 脚本、Jupyter Notebook。
 
-**项目位置**：BioAgentLab 仓库的独立子项目 `courses/openai-agents-sdk-zh/`，不会改动原项目的 `bioagent/`、`book/`、`examples/` 等文件。
+本项目属于 BioAgentLab 仓库的**独立子项目**：`courses/openai-agents-sdk-zh/`，不改动原科研主工程。
 
-## 先运行起来（Windows PowerShell）
+## 五分钟入门（Windows PowerShell）
 
 ```powershell
 git clone https://github.com/zbyloveyj/BioAgentLab.git
@@ -18,9 +18,9 @@ python lessons/00_environment_check.py
 pytest -q
 ```
 
-如果系统提示执行策略阻止激活虚拟环境，请参考 `docs/01_环境安装.md`；也可以不激活，直接使用 `.venv\Scripts\python.exe` 执行后续命令。**以上离线检查和单元测试无需 API Key**。
+若 PowerShell 不允许激活，直接用 `.\.venv\Scripts\python.exe` 运行命令，或看 `docs/01_环境安装.md`。
 
-在 `.env` 中填写你的 `OPENAI_API_KEY`（不要上传），然后运行：
+**到这里无需 API Key**。然后在 `.env` 里配置自己的 `OPENAI_API_KEY`（绝不可上传到 GitHub），运行：
 
 ```powershell
 python lessons/01_first_agent.py
@@ -28,90 +28,66 @@ python lessons/02_function_tools.py
 python -m jupyter lab
 ```
 
-Jupyter Lab 启动后打开 `notebooks/00_开始之前.ipynb`，逐节运行；代码单元里使用 `await Runner.run(...)`，而独立 Python 脚本使用 `Runner.run_sync(...)` 或 `asyncio.run(...)`。
+先打开 `notebooks/00_开始之前.ipynb`，然后按编号学习。macOS / Linux 换成 `python3 -m venv .venv`、`source .venv/bin/activate`、`cp .env.example .env`。
 
-macOS / Linux：用 `python3 -m venv .venv`、`source .venv/bin/activate`、`cp .env.example .env`，其余命令相同。
+## 全课程路线
 
-## 课程导航
-
-| 阶段 | 可运行脚本 / Notebook | 能学到什么 | 是否需要联网/API |
+| 阶段 | 文件 | 学习目标 | 外部依赖 |
 |---|---|---|---|
-| 00 环境 | `lessons/00_environment_check.py` | Python、配置与诊断 | 不需要 |
-| 01 第一个 Agent | `lessons/01_first_agent.py` | Agent、instructions、Runner | OpenAI API |
-| 02 自定义工具 | `lessons/02_function_tools.py` | Python 函数工具、模型决策 | OpenAI API |
-| 03 结构化输出 | `lessons/03_structured_output.py` | Pydantic、可验证数据模型 | OpenAI API |
-| 04 会话记忆 | `lessons/04_session_memory.py` | SQLiteSession、多轮对话 | OpenAI API |
-| 05 PubMed | `lessons/05_pubmed_search.py` | NCBI E-utilities、PMID、摘要 | NCBI + OpenAI API |
-| 06 本地 RAG | `lessons/06_local_rag.py` | 先检索本地资料再回答 | OpenAI API；本地库离线可查 |
-| 07 Handoff | `lessons/07_handoffs.py` | 分流到专业 Agent | OpenAI API |
-| 08 Agents as tools | `lessons/08_agents_as_tools.py` | 总控 Agent 调用子 Agent | OpenAI API |
-| 09 Streaming | `lessons/09_streaming.py` | 流式显示执行进度 | OpenAI API |
-| 10 Guardrails | `lessons/10_guardrails.py` | 输入防护，敏感任务限制 | OpenAI API |
-| 11 科研工作流 | `lessons/11_research_pipeline.py` | 检索、整理、导出 CSV/JSON | NCBI + OpenAI API |
-| 12 离线研究导出 | `lessons/12_offline_research.py` | 在无密钥情况下练习可复现输出 | 不需要 |
+| 00 环境 | `lessons/00_environment_check.py` | Python、配置、安装检查 | 离线 |
+| 01 第一个 Agent | `lessons/01_first_agent.py` | Agent / Runner | OpenAI API |
+| 02 函数工具 | `lessons/02_function_tools.py` | `@function_tool` | OpenAI API |
+| 03 结构化输出 | `lessons/03_structured_output.py` | Pydantic `output_type` | OpenAI API |
+| 04 会话记忆 | `lessons/04_session_memory.py` | SQLiteSession | OpenAI API |
+| 05 PubMed | `lessons/05_pubmed_search.py` | ESearch / EFetch / PMID | NCBI + OpenAI API |
+| 06 本地 RAG | `lessons/06_local_rag.py` | 检索增强 | OpenAI API |
+| 07 交接 | `lessons/07_handoffs.py` | 专家路由 | OpenAI API |
+| 08 子 Agent 工具 | `lessons/08_agents_as_tools.py` | 总控 + 专员 | OpenAI API |
+| 09 流式输出 | `lessons/09_streaming.py` | 事件与增量 | OpenAI API |
+| 10 输入护栏 | `lessons/10_guardrails.py` | Guardrail / tripwire | OpenAI API |
+| 11 科研导出 | `lessons/11_research_pipeline.py` | 文献检索与 CSV/JSON 导出 | NCBI + OpenAI API |
+| 12 离线科研练习 | `lessons/12_offline_research.py` | 没有密钥也能完成证据整理 | 离线 |
 
-> 建议每次运行一节，不要一开始运行全部联网脚本。Notebook 按同样顺序组织；包含解释、练习问题和对应脚本入口。
-
-## 理解整个系统
+## 最重要的理解
 
 ```text
-研究问题
+用户需求
    ↓
-Agent：理解任务 / 遵守科研证据规则
+Agent（研究目标、任务规则、可用工具）
    ↓
-Runner：持续调用模型并执行工具请求
-   ├─ 本地资料检索（无网络，教学语料）
-   ├─ PubMed E-utilities（真实检索，必须设置 NCBI_EMAIL）
-   ├─ 多轮会话 / 结构化输出
-   └─ 子 Agent：证据梳理、表达审校
+Runner（与模型交互并管理工具调用循环）
+   ├── 本地教学知识库查询
+   ├── PubMed E-utilities 官方接口
+   ├── 会话记录与结构化输出
+   └── 专业子 Agent
    ↓
-可追踪的 JSON / CSV / 报告
+有来源的文献摘要与结构化结果
 ```
 
-**必须区分：** `@tool` 让 Python 函数成为 SDK 能使用的工具；并不意味着模型已经获得无限文件/网络访问。Agent 的“自主”只在你明确提供的工具范围内发生。
+注意装饰器的官方正确写法是 `from agents import function_tool`，然后使用 `@function_tool`；不要使用其他教程里的 `from agents.decorators import tool`。
 
-## 课程资源
+## 文件说明
 
-- `notebooks/`：按节运行的交互式 Notebook（含讲解及练习）。
-- `lessons/`：终端可以运行的独立 Python 脚本。
-- `agent_course/`：可复用的配置、模拟数据、本地检索、PubMed 接口、报告导出。
-- `docs/`：环境、概念、执行链、RAG、科研证据、费用、安全、常见错误。
-- `tests/`：**不需要 API Key** 的离线单元测试。
-- `outputs/`：程序运行时生成（被 Git 忽略）。
-- `.github/workflows/`：该子项目内的参考 CI 工作流模板。由于这是 monorepo 的子目录，GitHub Actions 的实际生效配置仍应放在仓库根目录 `.github/workflows/`；当前只提供可移植样例，不自动修改 BioAgentLab 原来的工作流。
+- `lessons/`：每课一个可直接运行的 Python 文件
+- `notebooks/`：逐章节说明、代码示例和练习；也可复制脚本代码到 Notebook
+- `agent_course/`：配置、微生物教学数据、本地 RAG、PubMed 和导出
+- `docs/`：概念、安装、RAG、多 Agent、隐私/费用、故障排查
+- `tests/`：不需要网络或 OpenAI API 的单元测试
+- `.env.example`：环境变量示例，真实 `.env` 永远不上传
 
-## 关键配置
+## 特别说明
 
-```ini
-OPENAI_API_KEY=你的密钥
-OPENAI_MODEL=gpt-5-mini
-NCBI_EMAIL=你本人用于NCBI检索联系的电子邮箱
-# NCBI_API_KEY=可选
-OPENAI_AGENTS_DISABLE_TRACING=1
-```
-
-`OPENAI_MODEL` 可按你账户可用模型更改。模型名不一定对所有账号开放。SDK 与 API 用量按实际请求计费，ChatGPT 订阅不自动包含 API 费用。保持 `OPENAI_AGENTS_DISABLE_TRACING=1` 适合初期学习，避免意外上传输入输出到追踪后端；需要调试时可自行开启。
-
-## 如何判断自己真正学会了
-
-学完 01 能说明 `Agent` 与 `Runner` 的分工；学完 02 能新建一个自己的 `@tool`；学完 03 知道为什么科学数据应使用结构化输出；学完 05 能提供 PMID 且区分元数据和摘要；学完 11 能把研究问题变成一个**有来源、有格式、有校验**的可复现输出过程。
-
-## 科研数据真实性与安全
-
-- 本地语料为**教学示例**，不是经过审查的学术证据；不要引用为疾病关联结论。
-- PubMed 在线功能通过 NCBI 官方 E-utilities 拉取**实际记录**，但联网环境、文章是否含摘要、可访问性以及 API 限额会影响结果。
-- `05`、`11` 明确检查 `NCBI_EMAIL`，不伪造通讯邮箱，不捏造 PMID。NCBI 默认总请求速率建议不超过每秒 3 次（无 NCBI API key）。
-- LLM 的生成文本不是实验结果；**来源题名、摘要与模型解释必须分开保存**。
-- 不要输入患者隐私、未公开的队列数据、密码等；在真正的科研环境中应进一步增加审批、访问控制与审计。
-- `.env`、`outputs/`、`*.sqlite3` 等不进 Git；如果不慎提交密钥，请立即撤销/轮换。
+- `OPENAI_MODEL` 默认使用 `gpt-5-mini`，若账户不可用请改为自己有权限调用的模型。
+- 在线 SDK 使用 OpenAI API，按实际请求产生费用，不属于 ChatGPT 订阅的免费额度。
+- `NCBI_EMAIL` 必须填真实可联系邮箱；程序不使用假邮箱、不伪造文献 PMID。真实在线检索可能受到网络、NCBI 速率或检索命中情况的影响。
+- `agent_course/data.py` 中的微生物资料明确为**教学数据**；不可当成论文、临床结论或真实 PubMed 结果。
+- `OPENAI_AGENTS_DISABLE_TRACING=1` 供初学者选择关闭远程追踪，防止意外发送研究文本到追踪后端；处理真实敏感科研数据前还需要伦理审查与数据治理。
 
 ## 官方参考
 
-- 中文快速开始：https://openai.github.io/openai-agents-python/zh/quickstart/
-- 工具：https://openai.github.io/openai-agents-python/zh/tools/
-- 会话：https://openai.github.io/openai-agents-python/zh/sessions/
-- 流式输出：https://openai.github.io/openai-agents-python/zh/streaming/
-- 追踪：https://openai.github.io/openai-agents-python/zh/tracing/
-- NCBI E-utilities：https://www.ncbi.nlm.nih.gov/books/NBK25499/
+- https://openai.github.io/openai-agents-python/zh/quickstart/
+- https://openai.github.io/openai-agents-python/zh/tools/
+- https://openai.github.io/openai-agents-python/zh/sessions/
+- https://openai.github.io/openai-agents-python/zh/handoffs/
+- https://www.ncbi.nlm.nih.gov/books/NBK25499/
 
-本教材以 2026 年 11 月核对的 Agents SDK 官方文档为依据；SDK 后续更新时，优先核对文档和本项目的 `docs/06_故障排查.md`。
