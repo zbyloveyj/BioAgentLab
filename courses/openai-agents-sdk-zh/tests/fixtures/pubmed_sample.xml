@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PubmedArticleSet>
+  <PubmedArticle>
+    <MedlineCitation>
+      <PMID>000000001</PMID>
+      <Article><ArticleTitle>Demo record for parser tests</ArticleTitle>
+        <Abstract><AbstractText Label="BACKGROUND">Synthetic test content, not a real publication.</AbstractText>
+          <AbstractText Label="RESULTS">No scientific findings are asserted.</AbstractText></Abstract>
+        <Journal><JournalIssue><PubDate><Year>2026</Year><Month>Nov</Month></PubDate></JournalIssue></Journal>
+      </Article>
+    </MedlineCitation>
+  </PubmedArticle>
+</PubmedArticleSet>
